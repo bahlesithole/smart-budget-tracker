@@ -1,0 +1,259 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Budget Tracker</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo-title">
+                                <span class="logo" aria-label="Pie Chart Icon" style="display:inline-flex;align-items:center;">
+                                    <svg width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <circle cx="19" cy="19" r="17" fill="#6C63FF"/>
+                                        <path d="M19 2v17h17A17 17 0 0 0 19 2z" fill="#fff" fill-opacity=".7"/>
+                                        <path d="M19 19V2A17 17 0 0 0 2 19h17z" fill="#6C63FF" fill-opacity=".9"/>
+                                    </svg>
+                                </span>
+                <h1><span class="gradient-text">Smart Budget Tracker</span></h1>
+            </div>
+            <p class="subtitle">Track income and expenses, visualize spending, and manage your finances effectively.</p>
+            <div class="currency-switcher">
+                                <span style="display:inline-flex;align-items:center;margin-right:4px;">
+                                    <svg width="24" height="20" viewBox="0 0 24 20" fill="none" xmlns="http://www.w3.org/2000/svg" style="vertical-align:middle;">
+                                        <ellipse cx="12" cy="3.5" rx="10" ry="3.5" fill="#232b3b"/>
+                                        <ellipse cx="12" cy="8.5" rx="10" ry="3.5" fill="#232b3b"/>
+                                        <ellipse cx="12" cy="13.5" rx="10" ry="3.5" fill="#232b3b"/>
+                                    </svg>
+                                </span>
+                                <span>Currency:</span>
+                <select id="currency-select" title="Select currency">
+                    <option value="ZAR">ZAR (R)</option>
+                    <option value="USD">USD ($)</option>
+                    <option value="EUR">EUR (€)</option>
+                </select>
+            </div>
+        </header>
+
+        <section class="bill-reminders">
+                        <h2 style="font-size:2rem;font-weight:700;display:flex;align-items:center;gap:10px;">
+                            <span class="icon" style="display:inline-flex;align-items:center;">
+                                <svg width="28" height="28" viewBox="0 0 24 24" fill="#232b3b" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12 2C9.243 2 7 4.243 7 7v2.382C7 10.271 6.632 11.104 6.025 11.707A4.978 4.978 0 0 0 5 15v1c0 .553.447 1 1 1h12c.553 0 1-.447 1-1v-1a4.978 4.978 0 0 0-1.025-3.293C17.368 11.104 17 10.271 17 9.382V7c0-2.757-2.243-5-5-5zm0 20c1.104 0 2-.896 2-2h-4c0 1.104.896 2 2 2z"/>
+                                </svg>
+                            </span>
+                            <span style="color:#232b3b;">Bill Reminders</span>
+                        </h2>
+            <div class="reminders-list" id="reminders-list"></div>
+            <form id="reminder-form" style="display:none;gap:12px;margin-bottom:12px;align-items:center;" autocomplete="off">
+                <input type="text" id="reminder-desc" placeholder="Bill description" required style="padding:10px 14px;border-radius:8px;border:1px solid #e2e8f0;font-size:1rem;background:#f3f4f6;min-width:140px;">
+                <input type="number" id="reminder-amount" placeholder="Amount" min="0" step="0.01" required style="padding:10px 14px;border-radius:8px;border:1px solid #e2e8f0;font-size:1rem;background:#f3f4f6;min-width:80px;">
+                <input type="date" id="reminder-date" required style="padding:10px 14px;border-radius:8px;border:1px solid #e2e8f0;font-size:1rem;background:#f3f4f6;">
+                <button type="submit" class="primary-btn" style="padding:10px 18px;">Add</button>
+                <button type="button" id="reminder-cancel" style="padding:10px 18px;border-radius:8px;border:none;background:#e2e8f0;color:#232b3b;font-size:1rem;cursor:pointer;">Cancel</button>
+            </form>
+            <button id="add-reminder-btn" class="primary-btn">+ Add Bill Reminder</button>
+        </section>
+
+        <section class="summary-cards">
+                        <div class="card balance">
+                                <span class="icon" style="display:inline-flex;align-items:center;">
+                                    <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <rect x="2" y="5" width="18" height="12" rx="2" fill="#232b3b"/>
+                                        <rect x="2" y="8" width="18" height="2" fill="#fff" fill-opacity=".2"/>
+                                        <rect x="4" y="13" width="3" height="2" rx="1" fill="#fff" fill-opacity=".7"/>
+                                    </svg>
+                                </span>
+                                <span style="color:#232b3b;font-weight:400;">Current Balance</span>
+                                <div class="amount" id="current-balance">$0.00</div>
+                        </div>
+                        <div class="card income">
+                                <span class="icon" style="display:inline-flex;align-items:center;">
+                                    <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M11 4v12" stroke="#232b3b" stroke-width="2.2" stroke-linecap="round"/>
+                                        <path d="M7 12l4 4 4-4" stroke="#232b3b" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </span>
+                                <span style="color:#232b3b;font-weight:400;">Total Income</span>
+                                <div class="amount" id="total-income">$0.00</div>
+                        </div>
+                        <div class="card expenses">
+                                <span class="icon" style="display:inline-flex;align-items:center;">
+                                    <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M11 18V6" stroke="#232b3b" stroke-width="2.2" stroke-linecap="round"/>
+                                        <path d="M15 10l-4-4-4 4" stroke="#232b3b" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </span>
+                                <span style="color:#232b3b;font-weight:400;">Total Expenses</span>
+                                <div class="amount" id="total-expenses">$0.00</div>
+                        </div>
+        </section>
+
+        <section class="add-transaction">
+                        <h2 style="font-size:2rem;font-weight:700;display:flex;align-items:center;gap:10px;">
+                            <span class="icon" style="display:inline-flex;align-items:center;">
+                                <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="14" cy="14" r="13" fill="#232b3b"/>
+                                    <path d="M14 9v10M9 14h10" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/>
+                                </svg>
+                            </span>
+                            <span style="color:#232b3b;">Add Transaction</span>
+                        </h2>
+            <form id="transaction-form">
+                <input type="text" id="description" placeholder="Enter transaction description" required>
+                <input type="number" id="amount" placeholder="Amount" min="0" step="0.01" required>
+                <div class="type-category-row">
+                    <div class="type-select">
+                        <label><input type="radio" name="type" value="income" checked> Income</label>
+                        <label><input type="radio" name="type" value="expense"> Expense</label>
+                    </div>
+                    <select id="category" title="Select transaction category">
+                        <option value="Salary">Salary</option>
+                        <option value="Freelance">Freelance</option>
+                        <option value="Investment">Investment</option>
+                        <option value="Food & Dining">Food & Dining</option>
+                        <option value="Transportation">Transportation</option>
+                        <option value="Shopping">Shopping</option>
+                        <option value="Entertainment">Entertainment</option>
+                        <option value="Utilities">Utilities</option>
+                        <option value="Healthcare">Healthcare</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <input type="date" id="date" required title="Select transaction date" placeholder="Select date">
+                <button type="submit" class="primary-btn">+ Add Transaction</button>
+            </form>
+        </section>
+
+        <section class="transaction-history">
+            <div class="filter-row">
+                <button class="filter-btn active" data-filter="all">All Transactions</button>
+                <button class="filter-btn" data-filter="income">Income</button>
+                <button class="filter-btn" data-filter="expense">Expenses</button>
+                <button class="filter-btn" data-filter="Food">Food</button>
+                <button class="filter-btn" data-filter="Shopping">Shopping</button>
+                <button class="filter-btn" data-filter="Transportation">Transportation</button>
+                <button class="filter-btn" data-filter="Entertainment">Entertainment</button>
+            </div>
+                        <h2 style="font-size:2rem;font-weight:700;display:flex;align-items:center;gap:10px;">
+                            <span class="icon" style="display:inline-flex;align-items:center;">
+                                <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="14" cy="14" r="12" stroke="#232b3b" stroke-width="2" fill="none"/>
+                                    <path d="M14 8v6l4 2" stroke="#232b3b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M6 14a8 8 0 1 1 8 8" stroke="#232b3b" stroke-width="2" fill="none"/>
+                                </svg>
+                            </span>
+                            <span style="color:#232b3b;">Transaction History</span>
+                        </h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th>Category</th>
+                        <th>Date</th>
+                        <th>Type</th>
+                        <th>Amount</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="transaction-table-body">
+                    <tr class="no-transactions">
+                        <td colspan="6" style="text-align:center;">
+                            <div class="no-transactions-icon">🧾</div>
+                            <div>No transactions yet</div>
+                            <p>Add your first income or expense to get started</p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section class="budget-goals">
+                        <h2 style="font-size:2rem;font-weight:700;display:flex;align-items:center;gap:10px;">
+                            <span class="icon" style="display:inline-flex;align-items:center;">
+                                <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="14" cy="14" r="11" stroke="#232b3b" stroke-width="2.2" fill="none"/>
+                                    <circle cx="14" cy="14" r="6" stroke="#232b3b" stroke-width="2.2" fill="none"/>
+                                    <circle cx="14" cy="14" r="2.5" fill="#232b3b"/>
+                                </svg>
+                            </span>
+                            <span style="color:#232b3b;">Budget Goals</span>
+                        </h2>
+            <div id="budget-goals-list"></div>
+                <form id="budget-goal-form" style="display:none;gap:12px;margin-bottom:12px;align-items:center;" autocomplete="off">
+                    <input type="text" id="budget-goal-name" placeholder="Goal name" required style="padding:10px 14px;border-radius:8px;border:1px solid #e2e8f0;font-size:1rem;background:#f3f4f6;min-width:140px;">
+                    <input type="number" id="budget-goal-target" placeholder="Target amount" min="0" step="0.01" required style="padding:10px 14px;border-radius:8px;border:1px solid #e2e8f0;font-size:1rem;background:#f3f4f6;min-width:80px;">
+                    <button type="submit" class="primary-btn" style="padding:10px 18px;">Add</button>
+                    <button type="button" id="budget-goal-cancel" style="padding:10px 18px;border-radius:8px;border:none;background:#e2e8f0;color:#232b3b;font-size:1rem;cursor:pointer;">Cancel</button>
+                </form>
+            <button id="add-budget-goal-btn" class="primary-btn">+ Add Budget Goal</button>
+        </section>
+
+        <section class="savings-goals">
+                        <h2 style="font-size:2rem;font-weight:700;display:flex;align-items:center;gap:10px;">
+                            <span class="icon" style="display:inline-flex;align-items:center;">
+                                <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <g>
+                                        <ellipse cx="15" cy="18" rx="9" ry="6" fill="#232b3b"/>
+                                        <circle cx="10.5" cy="17" r="1.2" fill="#fff"/>
+                                        <rect x="6.5" y="13.5" width="2.5" height="2.5" rx="1.2" fill="#232b3b"/>
+                                        <rect x="19" y="13.5" width="2.5" height="2.5" rx="1.2" fill="#232b3b"/>
+                                        <rect x="12" y="8" width="4" height="2" rx="1" fill="#232b3b"/>
+                                        <ellipse cx="15" cy="12" rx="7" ry="4.5" fill="#232b3b"/>
+                                    </g>
+                                </svg>
+                            </span>
+                            <span style="color:#232b3b;">Savings Goals</span>
+                        </h2>
+            <div id="savings-goals-list"></div>
+            <form id="savings-goal-form" style="display:none;gap:12px;margin-bottom:12px;align-items:center;" autocomplete="off">
+                <input type="text" id="savings-goal-name" placeholder="Goal name" required style="padding:10px 14px;border-radius:8px;border:1px solid #e2e8f0;font-size:1rem;background:#f3f4f6;min-width:140px;">
+                <input type="number" id="savings-goal-target" placeholder="Target amount" min="0" step="0.01" required style="padding:10px 14px;border-radius:8px;border:1px solid #e2e8f0;font-size:1rem;background:#f3f4f6;min-width:80px;">
+                <button type="submit" class="primary-btn" style="padding:10px 18px;">Add</button>
+                <button type="button" id="savings-goal-cancel" style="padding:10px 18px;border-radius:8px;border:none;background:#e2e8f0;color:#232b3b;font-size:1rem;cursor:pointer;">Cancel</button>
+            </form>
+            <button id="add-savings-goal-btn" class="primary-btn">+ Add Savings Goal</button>
+        </section>
+
+        <section class="spending-trends">
+                        <h2 style="font-size:2rem;font-weight:700;display:flex;align-items:center;gap:10px;">
+                            <span class="icon" style="display:inline-flex;align-items:center;">
+                                <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <polyline points="4,28 4,20 12,16 20,22 28,8" stroke="#232b3b" stroke-width="2.2" fill="none"/>
+                                    <circle cx="4" cy="20" r="1.5" fill="#232b3b"/>
+                                    <circle cx="12" cy="16" r="1.5" fill="#232b3b"/>
+                                    <circle cx="20" cy="22" r="1.5" fill="#232b3b"/>
+                                    <circle cx="28" cy="8" r="1.5" fill="#232b3b"/>
+                                    <line x1="4" y1="28" x2="28" y2="28" stroke="#232b3b" stroke-width="2.2"/>
+                                </svg>
+                            </span>
+                            <span style="color:#232b3b;">Spending Trends</span>
+                        </h2>
+            <div id="spending-trends-chart"></div>
+        </section>
+
+        <section class="monthly-summary">
+            <h2><span class="icon">📅</span> Monthly Summary</h2>
+            <div class="summary-row">
+                <div class="summary-card">
+                    <div>This Month's Income</div>
+                    <div class="amount" id="monthly-income">$0.00</div>
+                </div>
+                <div class="summary-card">
+                    <div>This Month's Expenses</div>
+                    <div class="amount" id="monthly-expenses">$0.00</div>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <div>Smart Budget Tracker © 2025 | Data saved locally in your browser</div>
+            <div class="footer-note">🔄 All updates happen in real-time</div>
+        </footer>
+    </div>
+    <script src="main.js"></script>
+</body>
+</html>
